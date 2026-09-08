@@ -1,0 +1,24 @@
+[project]
+name = "ase-agent"
+version = "0.1.0"
+description = "ASE - the word that acts. An onchain agent that reads live data, holds a wallet, pays for what it uses, and acts with verifiable identity."
+requires-python = ">=3.11"
+dependencies = [
+    "httpx>=0.27",
+    "web3>=7.0",
+    "eth-account>=0.13",
+    "pytest>=8.0",
+]
+
+[project.optional-dependencies]
+ts-demo = []
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
