@@ -1,0 +1,18 @@
+{
+  "version": "ase-attest-v1",
+  "agent": "0x8E0d959C286308038041521131138d15455F5E95",
+  "act": "pay_data_provider",
+  "ts": 1788963252,
+  "block": 11668461,
+  "decision": "Paid 1.0 USDC to data provider for feed access",
+  "payload": {
+    "payment": {
+      "tx_hash": "0xd472ef05d197dbeb2aec5e47dfeae2adf77735c572fda5093ebcfdd338e77558",
+      "amount_raw": 1000000,
+      "token": "0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238",
+      "resource": "ase:data_feed",
+      "ts": 1788963252
+    }
+  },
+  "signature": "0xe1e6e54d61a73d9bf62f391689accc34cf01c3d080041ea3bdbca8dee38887c23aed6bd4c82e74c039bedf1f1c972ac820e48417a029e7e8065672a7cff3d1831c"
+}

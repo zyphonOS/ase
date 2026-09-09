@@ -13,7 +13,7 @@ from typing import Any
 import httpx
 from web3 import Web3
 
-# Minimal ERC20 ABI: balanceOf + decimals + symbol
+# Minimal ERC20 ABI: balanceOf + decimals + symbol + transfer
 ERC20_ABI = [
     {"name": "balanceOf", "type": "function", "stateMutability": "view",
      "inputs": [{"name": "owner", "type": "address"}],
@@ -22,6 +22,9 @@ ERC20_ABI = [
      "inputs": [], "outputs": [{"name": "", "type": "uint8"}]},
     {"name": "symbol", "type": "function", "stateMutability": "view",
      "inputs": [], "outputs": [{"name": "", "type": "string"}]},
+    {"name": "transfer", "type": "function", "stateMutability": "nonpayable",
+     "inputs": [{"name": "to", "type": "address"}, {"name": "amount", "type": "uint256"}],
+     "outputs": [{"name": "", "type": "bool"}]},
 ]
 
 

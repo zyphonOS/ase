@@ -108,14 +108,19 @@ def _pay_usdc(w3: Web3, wallet, usdc_address: str, amount_raw: int,
         raise ValueError("payment demand has no payee address")
     token = w3.eth.contract(address=Web3.to_checksum_address(usdc_address),
                             abi=ERC20_ABI)
+    # EIP-1559: maxFeePerGas must cover basefee + priority tip. Floor the tip
+    # at 2 gwei but never let it exceed the max fee (RPC rejects otherwise).
+    base_fee = w3.eth.get_block("latest").baseFeePerGas
+    priority_tip = w3.to_wei(2, "gwei")
+    max_fee = base_fee * 2 + priority_tip
     tx = token.functions.transfer(
         Web3.to_checksum_address(payee), amount_raw,
     ).build_transaction({
         "from": wallet.address,
         "nonce": w3.eth.get_transaction_count(wallet.address),
         "gas": 80_000,
-        "maxFeePerGas": w3.eth.gas_price * 2,
-        "maxPriorityFeePerGas": w3.to_wei(2, "gwei"),
+        "maxFeePerGas": max_fee,
+        "maxPriorityFeePerGas": priority_tip,
         "chainId": w3.eth.chain_id,
     })
     tx_hash = wallet.send_transaction(tx, w3)

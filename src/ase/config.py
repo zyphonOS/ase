@@ -4,6 +4,33 @@ ASE never commits secrets. The agent wallet key lives in .env (gitignored).
 """
 import os
 from dataclasses import dataclass, field
+from pathlib import Path
+
+
+def _load_dotenv() -> None:
+    """Load KEY=VALUE pairs from ./.env into os.environ (no clobber).
+
+    Minimal on purpose: no python-dotenv dependency. Quotes are stripped,
+    blank lines and # comments ignored. Values are never logged.
+    """
+    candidate = Path.cwd() / ".env"
+    if not candidate.exists():
+        return
+    try:
+        for line in candidate.read_text(encoding="utf-8", errors="ignore").splitlines():
+            line = line.strip()
+            if not line or line.startswith("#") or "=" not in line:
+                continue
+            key, _, value = line.partition("=")
+            key = key.strip()
+            value = value.strip().strip('"').strip("'")
+            if key and key not in os.environ:
+                os.environ[key] = value
+    except Exception:
+        pass
+
+
+_load_dotenv()
 
 
 def _env(key: str, default: str = "") -> str:

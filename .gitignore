@@ -10,3 +10,14 @@ dist/
 node_modules/
 wallet.json
 *.key
+
+# demo build intermediates (final video + contact sheet are tracked)
+demo/frames/
+demo/clips/
+demo/voice/
+demo/assets/
+demo/ASE_demo_v1.mp4
+demo/ASE_demo_v2.mp4
+demo/ASE_demo_v2_loudnorm.mp4
+demo/ASE_demo.mp4
+demo/ASE_demo_final.mp4

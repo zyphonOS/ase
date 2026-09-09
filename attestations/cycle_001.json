@@ -1,0 +1,23 @@
+{
+  "version": "ase-attest-v1",
+  "agent": "0x8E0d959C286308038041521131138d15455F5E95",
+  "act": "data_pay_cycle",
+  "ts": 1788850270,
+  "block": 11659498,
+  "decision": "report_surplus: USDC balance 20.00 above target 5.00 - flagging surplus for the human's review",
+  "payload": {
+    "reading": {
+      "kind": "erc20_balance",
+      "block": 11659498,
+      "holder": "0x8E0d959C286308038041521131138d15455F5E95",
+      "token": "0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238",
+      "symbol": "USDC",
+      "raw": 20000000,
+      "human": 20.0
+    },
+    "paid": false,
+    "payment": {},
+    "errors": []
+  },
+  "signature": "0x019ee35b7e380cbff2dcd581043bffd1a218a7e928da902fba25b42b96f492e740e8afc107b6acbf6b77c888df9fd6360440eeb6d9d404d325dea3e5732b25d51b"
+}
