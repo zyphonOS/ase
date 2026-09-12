@@ -90,8 +90,10 @@ that file is her durable memory across restarts.
 ASE is chain-agnostic: the RPC and USDC address come from config and the chain
 id is read from the RPC at runtime. She runs on Ethereum Sepolia by default
 and on Arc Testnet (Circle's EVM L1, chain 5042002, USDC as native gas) by
-setting the two Arc values in `.env`. A real agent-initiated USDC payment has
-fired on Sepolia (tx `0xd472ef...`, block 11668461).
+setting the two Arc values in `.env`. Real agent-initiated USDC payments have
+fired on both chains: Sepolia tx `0xd472ef...` (block 11668461) and Arc
+Testnet tx `0x96d7a87b...` (block 61750008, 1.0 USDC, receipt status 0x1,
+[arcscan](https://testnet.arcscan.app/tx/0x96d7a87b97b8784aa9b8dbba00e2a43135c4d1f9f3d047026a948c7effd0a9c9)).
 
 ## Run Commands
 

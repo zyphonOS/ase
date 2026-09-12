@@ -29,6 +29,8 @@ ASE is a Yoruba concept: the power to make things happen. She is named for exact
 | First on-chain payment | **1.0 USDC** to a data provider. Block **11668461**. Tx `0xd472ef05d197dbeb2aec5e47dfeae2adf77735c572fda5093ebcfdd338e77558` |
 | Verified attestation | signed record of the act, **valid: true** |
 | Live autonomous cycle | block **11688398**, decision `report_surplus`, signed `attestations/live_1789209734.json` |
+| Chainlink live feed | ETH/USD **2541.18** @ block **11689470**, signed `attestations/live_1789223040.json` |
+| **Arc Testnet payment** | **1.0 USDC** to a data provider. Block **61750008**. Tx `0x96d7a87b97b8784aa9b8dbba00e2a43135c4d1f9f3d047026a948c7effd0a9c9` (arcscan: `https://testnet.arcscan.app/tx/0x96d7a87b97b8784aa9b8dbba00e2a43135c4d1f9f3d047026a948c7effd0a9c9`), attestation **valid: true** |
 
 To verify: open Ethereum Sepolia, look up the transaction, or run the attestation verifier in the repo.
 

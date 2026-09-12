@@ -1,0 +1,18 @@
+{
+  "version": "ase-attest-v1",
+  "agent": "0x8E0d959C286308038041521131138d15455F5E95",
+  "act": "pay_data_provider_arc",
+  "ts": 1789226663,
+  "block": 61750008,
+  "decision": "Paid 1.0 USDC to data provider for feed access on Arc Testnet",
+  "payload": {
+    "payment": {
+      "tx_hash": "0x96d7a87b97b8784aa9b8dbba00e2a43135c4d1f9f3d047026a948c7effd0a9c9",
+      "amount_raw": 1000000,
+      "token": "0x3600000000000000000000000000000000000000",
+      "resource": "ase:arc_data_feed",
+      "ts": 1789226663
+    }
+  },
+  "signature": "0xb4ef08a8159b36e949a08c140aa87a5b6a4b2629e58ea312ff7bc28b09401dd702627e9f91b7317109cdc548b77b10d106707a7fab8d540954ab62f73920d4871b"
+}

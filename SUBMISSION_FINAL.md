@@ -55,7 +55,7 @@ https://github.com/zyphonOS/ase
 ## Partner prizes selected (3 - real integrations only)
 
 1. The Graph - $15,000 (AI use of subgraphs, config-driven live-data loop)
-2. Arc - $10,000 (agentic economy, chain-agnostic USDC pay lane; Arc Testnet run pending faucet)
+2. Arc - $10,000 (agentic economy, chain-agnostic USDC pay lane; LIVE Arc Testnet payment receipted: tx 0x96d7a87b..., block 61750008)
 3. Chainlink - $3,000 (live price feed read, receipted on Sepolia block 11689470)
 
 > Ledger is DESELECTED (Sep 12, evidence-based): the track requires the Ledger
@@ -67,9 +67,7 @@ additional-technologies fields, all five subfields each with real code links).
 
 ## Remaining before SUBMIT
 
-- [ ] EBVKA (30s): pastes wallet `0x8E0d...95` at faucet.circle.com (Arc
-      Testnet, USDC) ONLY if we want the live Arc Testnet payment receipt
-      before submit; the Arc answer is already complete without it.
+- [x] Arc Testnet payment RECEIPTED (1.0 USDC, block 61750008, attestation valid:true)
 - [ ] Paste PRIZE_ANSWERS.md into the form's prize fields (The Graph + Arc)
 - [ ] Deselect Ledger in the prize checkboxes (now that prizes are enabled)
 - [ ] EBVKA pastes the core fields above into the ETHGlobal form if not already
