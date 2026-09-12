@@ -56,9 +56,18 @@ def run_cycle(config: Config, wallet: Wallet, w3, pay_fn=None) -> CycleResult:
     result.reading = {"kind": reading.kind, "block": reading.block,
                       **reading.data}
 
-    # optional subgraph cross-check (The Graph track)
+    # optional subgraph data path (The Graph track): when a URL and a query
+    # are configured, ASE pulls live indexed data into the block-stamped
+    # reading, so The Graph is load-bearing where it is wired. Errors never
+    # kill the cycle; they are recorded honestly in the attestation.
     if config.subgraph_url and subgraph_available(config.subgraph_url):
         result.reading["subgraph"] = "reachable"
+        if config.subgraph_query:
+            try:
+                result.reading["subgraph_data"] = read_subgraph(
+                    config.subgraph_url, config.subgraph_query)
+            except Exception as e:
+                result.errors.append(f"subgraph: {e}")
 
     # DECIDE
     action, rationale = decide(reading)

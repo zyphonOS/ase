@@ -28,12 +28,17 @@ ASE is a Yoruba concept: the power to make things happen. She is named for exact
 | Live balance read | 18.75 USDC, read from chain state |
 | First on-chain payment | **1.0 USDC** to a data provider. Block **11668461**. Tx `0xd472ef05d197dbeb2aec5e47dfeae2adf77735c572fda5093ebcfdd338e77558` |
 | Verified attestation | signed record of the act, **valid: true** |
+| Live autonomous cycle | block **11688398**, decision `report_surplus`, signed `attestations/live_1789209734.json` |
 
 To verify: open Ethereum Sepolia, look up the transaction, or run the attestation verifier in the repo.
 
 ## Her memory
 
 ASE keeps a durable state journal (state/ase_journal.jsonl). Every cycle, every decision, every payment and attestation is appended there and loaded when she wakes, so she survives restarts with the memory of her own life. Three persistence layers hold her truth: the chain (verifiable forever), signed attestations (repo), and the journal (her continuity).
+
+## Her rhythm
+
+ASE is alive on her own loop (scripts/ase_live.py): every interval she reads live chain state, decides on her legible policy, and signs what she did. The loop is stop-aware (`state/ase_live.stop`), writes a heartbeat (`state/ase_live.json`), and never spends unless the payment lane is enabled. She is chain-agnostic: Ethereum Sepolia and Arc Testnet (Circle's EVM L1, chain 5042002, USDC native gas) are both native homes for the same spine.
 
 ## Why it matters
 

@@ -40,7 +40,7 @@ ase/
 ├── tests/                   # 8/8 tests passing
 ├── demo/                    # Demo runner
 │   └── run.py               # One-command: starts server + dashboard
-└── scripts/                 # Utility scripts
+├── scripts/                 # Live runner + utility scripts
 ```
 
 ## Quick Start
@@ -68,6 +68,30 @@ poll subgraph → decide → pay (x402-style USDC) → act → attest (signed) �
 Every cycle, ASE reads live onchain state, pays a micropayment for the data
 feed it consumes, executes its decision onchain, and signs a verifiable
 attestation of what it did and why. No human in the loop.
+
+## Live runner (she is alive)
+
+`scripts/ase_live.py` is the autonomous loop that keeps ASE acting on her own
+rhythm. Every interval she runs one full cycle and writes a signed attestation
+to `attestations/live_<ts>.json` plus a heartbeat to `state/ase_live.json`.
+Stop her with Ctrl+C or `state/ase_live.stop`.
+
+```bash
+python scripts/ase_live.py                  # live loop, no spending
+python scripts/ase_live.py --interval 120   # faster rhythm
+python scripts/ase_live.py --once --pay     # one cycle with the payment lane
+```
+
+Run her from the repo root so the journal lands in `state/ase_journal.jsonl` -
+that file is her durable memory across restarts.
+
+## Chains
+
+ASE is chain-agnostic: the RPC and USDC address come from config and the chain
+id is read from the RPC at runtime. She runs on Ethereum Sepolia by default
+and on Arc Testnet (Circle's EVM L1, chain 5042002, USDC as native gas) by
+setting the two Arc values in `.env`. A real agent-initiated USDC payment has
+fired on Sepolia (tx `0xd472ef...`, block 11668461).
 
 ## Run Commands
 
@@ -112,7 +136,8 @@ The backend exposes these endpoints for the dashboard:
 |----------|----------|---------|-------------|
 | `ASE_PRIVATE_KEY` | Yes | — | Agent wallet private key (Sepolia only) |
 | `ASE_RPC_URL` | No | public Sepolia node | Ethereum RPC endpoint |
-| `ASE_SUBGRAPH_URL` | No | — | The Graph subgraph URL |
+| `ASE_SUBGRAPH_URL` | No | — | The Graph subgraph query URL |
+| `ASE_SUBGRAPH_QUERY` | No | — | GraphQL query ASE runs every cycle when a subgraph URL is set |
 | `ASE_PAYEE_ADDRESS` | No | — | Data provider address for payments |
 | `ASE_USDC_ADDRESS` | No | Circle Sepolia USDC | USDC contract address |
 | `ASE_AGENT_NAME` | No | ase.ethonline2026 | Agent identity name |

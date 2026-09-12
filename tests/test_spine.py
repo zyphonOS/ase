@@ -119,3 +119,48 @@ def test_run_cycle_pays_on_surplus(monkeypatch):
     res = run_cycle(cfg, w, _FakeW3(), pay_fn=fake_pay)
     assert res.paid is True and calls == [1]
     assert res.payment["tx"] == "0xdeadbeef"
+
+
+def test_run_cycle_records_subgraph_data(monkeypatch):
+    import ase.agent as agent_mod
+    w = create_wallet()
+    reading = Reading(block=99, kind="erc20_balance",
+                      data={"holder": w.address, "token": "0x" + "a" * 40,
+                            "symbol": "USDC", "raw": 3_000_000, "human": 3.0})
+    monkeypatch.setattr(agent_mod, "read_chain_state",
+                        lambda *a, **k: reading)
+    monkeypatch.setattr(agent_mod, "subgraph_available", lambda url: True)
+    monkeypatch.setattr(
+        agent_mod, "read_subgraph",
+        lambda url, q, variables=None: {"pools": [{"id": "0xabc", "feeTier": "3000"}]})
+    cfg = Config(rpc_url="http://fake", usdc_address="0x" + "a" * 40,
+                 subgraph_url="http://fake-graph",
+                 subgraph_query="{ pools(first: 1) { id feeTier } }")
+    res = run_cycle(cfg, w, _FakeW3(), pay_fn=None)
+    assert res.reading.get("subgraph") == "reachable"
+    assert res.reading.get("subgraph_data", {}).get("pools")
+    att = json.loads(res.attestation_json)
+    assert "subgraph_data" in att["payload"]["reading"]
+
+
+def test_run_cycle_records_subgraph_error(monkeypatch):
+    import ase.agent as agent_mod
+    w = create_wallet()
+    reading = Reading(block=100, kind="erc20_balance",
+                      data={"holder": w.address, "token": "0x" + "a" * 40,
+                            "symbol": "USDC", "raw": 3_000_000, "human": 3.0})
+    monkeypatch.setattr(agent_mod, "read_chain_state",
+                        lambda *a, **k: reading)
+    monkeypatch.setattr(agent_mod, "subgraph_available", lambda url: True)
+
+    def boom(url, q, variables=None):
+        raise RuntimeError("subgraph down")
+
+    monkeypatch.setattr(agent_mod, "read_subgraph", boom)
+    cfg = Config(rpc_url="http://fake", usdc_address="0x" + "a" * 40,
+                 subgraph_url="http://fake-graph",
+                 subgraph_query="{ __typename }")
+    res = run_cycle(cfg, w, _FakeW3(), pay_fn=None)
+    assert any("subgraph" in e for e in res.errors)
+    att = json.loads(res.attestation_json)
+    assert "subgraph" in att["payload"]["reading"]

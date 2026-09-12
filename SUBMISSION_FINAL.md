@@ -52,18 +52,25 @@ https://github.com/zyphonOS/ase
 - First cycle attestation (read/decide/attest): `attestations/cycle_001.json`
 - Verify locally: `python -m ase.cli verify attestations/pay_0xd472ef05d197.json`
 
-## Partner prizes selected (max 3)
+## Partner prizes selected (2 - real integrations only)
 
-1. The Graph - Best AI Use Case (From Scratch) - $5,000
-2. Arc - Agentic Economy - $1,667
-3. Ledger - AI Agents x Ledger - $3,500
+1. The Graph - $15,000 (AI use of subgraphs, config-driven live-data loop)
+2. Arc - $10,000 (agentic economy, chain-agnostic USDC pay lane; Arc Testnet run pending faucet)
 
-(If the checkboxes are platform-disabled, submit without them and note the
-three picks in the description's last line: "Built for The Graph Best AI
-Use Case, Arc Agentic Economy, and Ledger AI Agents tracks.")
+> Ledger is DESELECTED (Sep 12, evidence-based): the track requires the Ledger
+> Key Ring CLI (`wallet-cli ring`); our wallet-cli 1.0.2 has no `ring` command,
+> no device, no Agent Stack. No honest path, no fabricated links.
+
+Paste-ready prize block answers: **`PRIZE_ANSWERS.md`** (The Graph + Arc +
+additional-technologies fields, all five subfields each with real code links).
 
 ## Remaining before SUBMIT
 
-- [ ] EBVKA pastes the fields above into the ETHGlobal form (CDP session or manual)
-- [ ] Demo video on YouTube (public/unlisted) if the form rejects raw GitHub raw links
-- [ ] Partner prize checkboxes when ETHGlobal enables them
+- [ ] EBVKA (30s): pastes wallet `0x8E0d...95` at faucet.circle.com (Arc
+      Testnet, USDC) ONLY if we want the live Arc Testnet payment receipt
+      before submit; the Arc answer is already complete without it.
+- [ ] Paste PRIZE_ANSWERS.md into the form's prize fields (The Graph + Arc)
+- [ ] Deselect Ledger in the prize checkboxes (now that prizes are enabled)
+- [ ] EBVKA pastes the core fields above into the ETHGlobal form if not already
+- [ ] Demo video on YouTube (public/unlisted) if the form rejects raw GitHub links
+- [ ] SUBMIT (EBVKA or verified CDP) before Sep 13 12:00 EDT

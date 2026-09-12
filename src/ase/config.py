@@ -45,6 +45,7 @@ class Config:
     rpc_url: str = field(default_factory=lambda: _env(
         "ASE_RPC_URL", "https://ethereum-sepolia-rpc.publicnode.com"))
     subgraph_url: str = field(default_factory=lambda: _env("ASE_SUBGRAPH_URL"))
+    subgraph_query: str = field(default_factory=lambda: _env("ASE_SUBGRAPH_QUERY"))
     # Pay: the payment layer (x402-style USDC)
     usdc_address: str = field(default_factory=lambda: _env(
         "ASE_USDC_ADDRESS", "0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238"))  # Sepolia USDC

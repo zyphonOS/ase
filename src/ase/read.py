@@ -62,7 +62,7 @@ def read_subgraph(subgraph_url: str, query: str,
     """Query a The Graph subgraph endpoint. Returns raw GraphQL data."""
     resp = httpx.post(subgraph_url, json={"query": query,
                                           "variables": variables or {}},
-                      timeout=15)
+                      timeout=15, follow_redirects=True)
     resp.raise_for_status()
     payload = resp.json()
     if payload.get("errors"):
