@@ -1,17 +1,65 @@
-# ASE — the word that acts
+# ASE the word that acts
 
-**ASE** (Yoruba: the power to make things happen) is an onchain AI agent that proves one claim: an agent can live onchain — **reading live data, holding a wallet, paying for what it uses, and acting with verifiable identity** — without being a toy.
+**ASE (pronounced Ah-sheh). Yoruba: the power to make things happen.**
 
-Built for **ETHOnline 2026**. One unit, one spine, four capabilities:
+ASE is an autonomous on-chain agent (AOSI) whose reality is verifiable: she reads live chain data, owns the wallet she holds, pays for what she uses, and signs every act so anyone can check it. Her first acts are on Ethereum Sepolia and can be verified on-chain.
+
+Her canon: `CANON.md`.
+
+ASE performs four capabilities, all verifiable on a public chain:
 
 | Capability | Meaning | Proof in this repo |
-|------------|---------|--------------------|
-| **Read**   | live cross-protocol data | live subgraph queries (The Graph) |
-| **Hold**   | a wallet it owns | testnet agent wallet, keys it alone holds |
-| **Pay**    | pays for what it uses | x402-style USDC payment for data |
-| **Act with identity** | verifiable, not anonymous | signed attestation anyone can verify |
+|------------|---------|---------------------|
+| **Read**   | live chain data | subgraph + balance reads (The Graph) |
+| **Hold**   | a wallet she owns | testnet agent wallet, keys no human signs for |
+| **Pay**    | pays for what she uses | 1.0 USDC on-chain payment for data, block 11668461 |
+| **Sign**   | verifiable identity | signed attestations, valid: true |
 
-## The demo loop (Act 1 — data-pay)
+Built for **ETHOnline 2026**, born on **Ethereum Sepolia**.
+
+## Architecture
+
+```
+ase/
+├── src/ase/                 # Python agent core
+│   ├── agent.py             # The acting loop: read → decide → pay → act → attest
+│   ├── cli.py               # CLI interface (python -m ase.cli)
+│   ├── server.py            # HTTP backend (serves dashboard + API)
+│   ├── config.py            # Env-driven configuration
+│   ├── identity.py          # Attestation signing + verification
+│   ├── pay.py               # x402-style USDC payments
+│   ├── read.py              # Chain state + subgraph reads
+│   └── wallet.py            # Agent wallet management
+├── dashboard/               # React + TypeScript + Tailwind frontend
+│   ├── src/
+│   │   ├── components/      # Header, AgentCycle, ActionCard, AttestationCard, ActivityLog
+│   │   ├── pages/Dashboard  # Main layout with live polling
+│   │   ├── services/api     # Backend API layer
+│   │   └── types/agent      # TypeScript interfaces
+│   └── dist/                # Production build (served by backend)
+├── tests/                   # 8/8 tests passing
+├── demo/                    # Demo runner
+│   └── run.py               # One-command: starts server + dashboard
+└── scripts/                 # Utility scripts
+```
+
+## Quick Start
+
+```bash
+# 1. Install Python dependencies
+pip install -e .
+
+# 2. Configure (copy and fill in)
+cp .env.example .env
+# Edit .env with your Sepolia wallet key
+
+# 3. Run the full stack (backend + dashboard)
+python demo/run.py
+
+# 4. Open http://localhost:8000
+```
+
+## The Demo Loop
 
 ```
 poll subgraph → decide → pay (x402-style USDC) → act → attest (signed) → log
@@ -21,20 +69,68 @@ Every cycle, ASE reads live onchain state, pays a micropayment for the data
 feed it consumes, executes its decision onchain, and signs a verifiable
 attestation of what it did and why. No human in the loop.
 
-## Stack
-
-- **Python 3.11+** core agent (`src/ase/`)
-- **web3.py + eth-account** — wallet, signing, testnet transactions
-- **httpx** — subgraph GraphQL reads
-- **TypeScript demo** (`demo/`) — optional surface for sponsor-track review
-
-## Run
+## Run Commands
 
 ```bash
-pip install -e .
-pytest                 # unit tests
-python -m ase.cli act  # one full acting cycle
+# One full acting cycle (read/decide/attest)
+python -m ase.cli act
+
+# Cycle with payment lane
+python -m ase.cli act --pay
+
+# Just read chain state
+python -m ase.cli read
+
+# Show wallet + balances
+python -m ase.cli wallet show
+
+# Create new wallet (prints key ONCE)
+python -m ase.cli wallet new
+
+# Start backend server + dashboard
+python demo/run.py
+
+# Or start server standalone
+python -m ase.server --port 8000
 ```
+
+## API
+
+The backend exposes these endpoints for the dashboard:
+
+| Endpoint | Method | Returns |
+|----------|--------|---------|
+| `/api/state` | GET | Full agent state (cycle, action, attestation, activity) |
+| `/api/activity` | GET | Activity event log |
+| `/api/attestation` | GET | Current attestation data |
+| `/api/status` | GET | Agent online status |
+| `/api/cycle` | POST | Trigger one full acting cycle |
+
+## Environment Variables
+
+| Variable | Required | Default | Description |
+|----------|----------|---------|-------------|
+| `ASE_PRIVATE_KEY` | Yes | — | Agent wallet private key (Sepolia only) |
+| `ASE_RPC_URL` | No | public Sepolia node | Ethereum RPC endpoint |
+| `ASE_SUBGRAPH_URL` | No | — | The Graph subgraph URL |
+| `ASE_PAYEE_ADDRESS` | No | — | Data provider address for payments |
+| `ASE_USDC_ADDRESS` | No | Circle Sepolia USDC | USDC contract address |
+| `ASE_AGENT_NAME` | No | ase.ethonline2026 | Agent identity name |
+
+## Tests
+
+```bash
+pytest                 # run all 8 tests
+pytest -v              # verbose output
+```
+
+## Stack
+
+- **Python 3.11+** core agent
+- **web3.py + eth-account** — wallet, signing, testnet transactions
+- **httpx** — subgraph GraphQL reads + HTTP 402 payments
+- **React 19 + TypeScript + Tailwind CSS** dashboard
+- **Vite** — fast builds, hot reload
 
 ## Why "ASE"
 

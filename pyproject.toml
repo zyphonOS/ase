@@ -11,7 +11,10 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-ts-demo = []
+dashboard = []
+
+[project.scripts]
+ase-server = "ase.server:main"
 
 [build-system]
 requires = ["setuptools>=68"]

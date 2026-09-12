@@ -9,6 +9,7 @@ from dataclasses import dataclass, field
 
 from .config import Config, load_config
 from .identity import make_attestation, sign_attestation
+from .journal import append as journal_append
 from .read import read_chain_state, read_subgraph, subgraph_available
 from .wallet import Wallet
 
@@ -82,4 +83,18 @@ def run_cycle(config: Config, wallet: Wallet, w3, pay_fn=None) -> CycleResult:
                  "payment": result.payment, "errors": result.errors})
     signed = sign_attestation(att, wallet)
     result.attestation_json = signed.to_json()
+
+    # JOURNAL (durable memory - survive restarts, full life record)
+    journal_append({
+        "kind": "cycle",
+        "act": "data_pay_cycle",
+        "agent": wallet.address,
+        "block": result.block,
+        "decision": result.decision,
+        "paid": result.paid,
+        "reading": result.reading,
+        "payment": result.payment,
+        "errors": result.errors,
+        "attestation": result.attestation_json,
+    })
     return result
