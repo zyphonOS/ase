@@ -121,6 +121,27 @@ def test_run_cycle_pays_on_surplus(monkeypatch):
     assert res.payment["tx"] == "0xdeadbeef"
 
 
+def test_run_cycle_records_chainlink_feed(monkeypatch):
+    import ase.agent as agent_mod
+    w = create_wallet()
+    reading = Reading(block=111, kind="erc20_balance",
+                      data={"holder": w.address, "token": "0x" + "a" * 40,
+                            "symbol": "USDC", "raw": 3_000_000, "human": 3.0})
+    monkeypatch.setattr(agent_mod, "read_chain_state",
+                        lambda *a, **k: reading)
+    monkeypatch.setattr(
+        agent_mod, "read_chainlink_feed",
+        lambda *a, **k: Reading(block=111, kind="chainlink_feed",
+                                data={"description": "ETH / USD",
+                                      "human": 2650.5, "round": 1}))
+    cfg = Config(rpc_url="http://fake", usdc_address="0x" + "a" * 40,
+                 chainlink_feed="0x" + "c" * 40)
+    res = run_cycle(cfg, w, _FakeW3(), pay_fn=None)
+    assert res.reading["chainlink"]["human"] == 2650.5
+    att = json.loads(res.attestation_json)
+    assert "chainlink" in att["payload"]["reading"]
+
+
 def test_run_cycle_records_subgraph_data(monkeypatch):
     import ase.agent as agent_mod
     w = create_wallet()

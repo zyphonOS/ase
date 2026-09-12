@@ -1,0 +1,25 @@
+{
+  "version": "ase-attest-v1",
+  "agent": "0x8E0d959C286308038041521131138d15455F5E95",
+  "act": "data_pay_cycle",
+  "ts": 1789213485,
+  "block": 11688695,
+  "decision": "report_surplus: USDC balance 18.75 above target 5.00 - flagging surplus for the human's review",
+  "payload": {
+    "reading": {
+      "kind": "erc20_balance",
+      "block": 11688695,
+      "holder": "0x8E0d959C286308038041521131138d15455F5E95",
+      "token": "0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238",
+      "symbol": "USDC",
+      "raw": 18750000,
+      "human": 18.75
+    },
+    "paid": false,
+    "payment": {},
+    "errors": [
+      "pay: [WinError 10061] No connection could be made because the target machine actively refused it"
+    ]
+  },
+  "signature": "0xd2fbd13adc9059a0d7c9fe7e669d0ab3a3cb614bec3e2da0c25689fc589c10d32ebc04f04c4488e61bc93faecf7a20b08e9ef64773c82b7758024ee20459b3b01b"
+}

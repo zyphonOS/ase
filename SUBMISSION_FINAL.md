@@ -52,10 +52,11 @@ https://github.com/zyphonOS/ase
 - First cycle attestation (read/decide/attest): `attestations/cycle_001.json`
 - Verify locally: `python -m ase.cli verify attestations/pay_0xd472ef05d197.json`
 
-## Partner prizes selected (2 - real integrations only)
+## Partner prizes selected (3 - real integrations only)
 
 1. The Graph - $15,000 (AI use of subgraphs, config-driven live-data loop)
 2. Arc - $10,000 (agentic economy, chain-agnostic USDC pay lane; Arc Testnet run pending faucet)
+3. Chainlink - $3,000 (live price feed read, receipted on Sepolia block 11689470)
 
 > Ledger is DESELECTED (Sep 12, evidence-based): the track requires the Ledger
 > Key Ring CLI (`wallet-cli ring`); our wallet-cli 1.0.2 has no `ring` command,

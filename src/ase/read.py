@@ -78,3 +78,41 @@ def subgraph_available(subgraph_url: str) -> bool:
         return True
     except Exception:
         return False
+
+
+# Minimal Chainlink AggregatorV3Interface ABI
+FEED_ABI = [
+    {"name": "latestRoundData", "type": "function", "stateMutability": "view",
+     "inputs": [],
+     "outputs": [{"name": "roundId", "type": "uint80"},
+                 {"name": "answer", "type": "int256"},
+                 {"name": "startedAt", "type": "uint256"},
+                 {"name": "updatedAt", "type": "uint256"},
+                 {"name": "answeredInRound", "type": "uint80"}]},
+    {"name": "decimals", "type": "function", "stateMutability": "view",
+     "inputs": [], "outputs": [{"name": "", "type": "uint8"}]},
+    {"name": "description", "type": "function", "stateMutability": "view",
+     "inputs": [], "outputs": [{"name": "", "type": "string"}]},
+]
+
+
+def read_chainlink_feed(rpc_url: str, feed_address: str) -> Reading:
+    """Live Chainlink price feed read (latestRoundData), block-stamped.
+
+    The same block used for the balance read is used here, so the whole
+    reading is one consistent snapshot of chain truth.
+    """
+    w3 = _w3(rpc_url)
+    if not w3.is_connected():
+        raise ConnectionError(f"RPC not reachable: {rpc_url}")
+    block = w3.eth.block_number
+    feed = w3.eth.contract(address=Web3.to_checksum_address(feed_address),
+                           abi=FEED_ABI)
+    round_id, answer, _, updated_at, _ = feed.functions.latestRoundData().call()
+    decimals = feed.functions.decimals().call()
+    description = feed.functions.description().call()
+    return Reading(block=block, kind="chainlink_feed", data={
+        "feed": feed_address, "description": description,
+        "raw": int(answer), "human": int(answer) / (10 ** decimals),
+        "round": int(round_id), "updated_at": int(updated_at),
+    })

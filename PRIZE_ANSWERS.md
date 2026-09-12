@@ -1,8 +1,8 @@
 # ASE - Partner Prize Answers (FINAL, Sep 12)
 
 Paste-order answers for the prize fields on the ETHGlobal submission form.
-Only prizes with REAL integration are applied: **The Graph** and **Arc**.
-**Ledger is deselected on purpose** (no honest path: the track requires the
+Three partners covered with REAL integrations: **The Graph**, **Arc**,
+**Chainlink**. Ledger is NOT selected (no honest path: the track requires the
 Ledger Key Ring CLI `wallet-cli ring`; our install has no `ring` command, no
 device, no Agent Stack - a fake code link would poison the submission).
 
@@ -70,8 +70,40 @@ Arc's EVM compatibility meant a chain-agnostic agent spine worked with only RPC 
 
 ---
 
+## Chainlink - $3,000
+
+**Why are you applicable for this prize?**
+```
+ASE reads a live Chainlink price feed in every acting cycle, giving the agent external market truth alongside its own on-chain state. The read is block-stamped and signed into ASE's attestation, so the market data behind every decision is verifiable by anyone.
+```
+
+**Details on how you're using this Protocol / API**
+```
+ASE's read layer (src/ase/read.py) includes a Chainlink data-feed reader: read_chainlink_feed() calls latestRoundData() on an AggregatorV3Interface proxy over a public RPC (no SDK needed), reads decimals and description, and returns a block-stamped reading. The acting loop (src/ase/agent.py) runs it every cycle when ASE_CHAINLINK_FEED is set and includes the feed data - description, raw answer, human price, round id, and updated timestamp - in the reading that gets signed into the attestation. A live read is receipted on Sepolia (block 11689470, ETH/USD $2541.18, feed 0x694AA1769357215DE4FAC081bf1f309aDC325306).
+```
+
+**Link to the line of code where the tech is used**
+```
+https://github.com/zyphonOS/ase/blob/main/src/ase/read.py#L99-L115
+(wired in the loop: https://github.com/zyphonOS/ase/blob/main/src/ase/agent.py#L73-L77)
+```
+
+**How easy is it to use the API / Protocol? (1-10)**
+
+```
+9
+```
+
+**Additional feedback for the Sponsor**
+```
+Chainlink feeds are the cleanest external data integration we added: a standard AggregatorV3Interface, one eth_call, zero SDK dependency, and it worked first try on the public testnet feed. Suggestions: a maintained list of live testnet feed addresses with exact proxy contracts would save lookup time, and the roundId/updatedAt transparency is excellent for agent verifiability - we read those fields straight into our attestation.
+```
+
+---
+
 ## Which other partners' technologies have you used?
 
-**The Graph** only (already applied for). No other sponsor tech is used in the
-build, so nothing else gets selected. (web3.py + eth-account + httpx are the
-general stack, not sponsor products.)
+None extra. The Graph, Arc, and Chainlink are all applied for as partner
+prizes above, and no other sponsor's tech is used in the build - so nothing
+else gets selected. (web3.py + eth-account + httpx are the general stack, not
+sponsor products.)

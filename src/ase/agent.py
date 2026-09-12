@@ -10,7 +10,7 @@ from dataclasses import dataclass, field
 from .config import Config, load_config
 from .identity import make_attestation, sign_attestation
 from .journal import append as journal_append
-from .read import read_chain_state, read_subgraph, subgraph_available
+from .read import read_chain_state, read_subgraph, subgraph_available, read_chainlink_feed
 from .wallet import Wallet
 
 
@@ -68,6 +68,14 @@ def run_cycle(config: Config, wallet: Wallet, w3, pay_fn=None) -> CycleResult:
                     config.subgraph_url, config.subgraph_query)
             except Exception as e:
                 result.errors.append(f"subgraph: {e}")
+
+    # optional live Chainlink price feed read (external market truth)
+    if config.chainlink_feed:
+        try:
+            result.reading["chainlink"] = read_chainlink_feed(
+                config.rpc_url, config.chainlink_feed).data
+        except Exception as e:
+            result.errors.append(f"chainlink: {e}")
 
     # DECIDE
     action, rationale = decide(reading)
